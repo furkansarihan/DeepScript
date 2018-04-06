@@ -1,6 +1,9 @@
+package srcold;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.awt.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,10 +23,12 @@ public class Edittor extends JPanel implements KeyListener {
     public int cursorIndex = 0;
     public Color bgColor = new Color(38, 38, 38);
     public Color txColor = new Color(230, 230, 230);
-    public Color crsColor = new Color(209, 224, 224);
+    public Color crsColor = new Color(255, 102, 102);
     public Color countColor = new Color(128, 128, 128);
-    public Font font = new Font("Corbel",Font.PLAIN, 14);
+    public Font font = new Font("Courier New",Font.PLAIN, 14);
+    
     public int lineCount = 1; // Default 1
+    public Java language = new Java();
 
 /***************************************************************/
     Edittor(){
@@ -32,7 +37,7 @@ public class Edittor extends JPanel implements KeyListener {
     }
 /***************************************************************/
     public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {  backspace(); repaint(); }
+        if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {  backspace(1); repaint(); }
         
         else { type(e.getKeyChar()); }
     }
@@ -49,13 +54,13 @@ public class Edittor extends JPanel implements KeyListener {
     public void leftCursor(){
         if(source.length()>0 && cursorIndex>0) cursorIndex--;
     }
-    public void backspace(){ 
+    public void backspace(int count){ 
         if(source != null && source.length()>0) {
-            source = source.substring(0, source.length()-1);
+            source = source.substring(0, cursorIndex-1)+source.substring(cursorIndex, source.length());
             cursorIndex--; }
     }
     public void type(char c){
-        //System.out.println(source.length()+""+cursorIndex);
+        System.out.println(source.length()+""+cursorIndex);
         if(!(source.length()==cursorIndex)){
             String s = new String (source.substring(0,cursorIndex) + c + source.substring(cursorIndex,source.length()));
             source = s;
@@ -66,7 +71,13 @@ public class Edittor extends JPanel implements KeyListener {
     }
     @Override
     public void paint(java.awt.Graphics g){
-        drawSource(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                             RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        drawSource(g2d);
     }
     void drawSource(java.awt.Graphics g){ // render source text
         g.setColor(bgColor);
@@ -87,12 +98,45 @@ public class Edittor extends JPanel implements KeyListener {
             if (i == cursorIndex-1) drawCursor(p,g);
         }
         DrawLineIndex(g);
+        //searchKeyword(g,p);
     }
     public void drawCursor(Point p, java.awt.Graphics g){
         g.setColor(crsColor); g.drawString("|",p.x,p.y); g.setColor(txColor);
     }
     public Point enterTyped(Point p, int CHARY){ p.x = 48; p.y += CHARY; return p; }
     public Point charTyped(Point p, int CHARX){ p.x += CHARX; return p; }
+/***************************************************************/
+public void searchKeyword(Graphics g,Point p){
+    int x = 0;
+    if(source.length()>0){
+    int i = source.length()-1,j = source.length()-1;
+    while (i > 0) {
+        while(source.charAt(j) != ' ' && j > 0){
+            j--;
+        }
+        //System.out.println(j+" "+i);
+        String key = source.substring(j,i+1);
+        System.out.println(key);
+        if(language.containsKey(key)){
+            x = g.getFontMetrics().stringWidth(key);
+            g.setColor((Color)language.get(key));
+            g.drawString(key,(p.x-x), p.y);
+            g.setColor(txColor);
+        }
+        i = j;
+        i--;
+    }   
+    }
+    /*//System.out.println(i+" "+(source.length()+1));
+    String key = source.substring(i+1,source.length());
+    //System.out.println(key);
+    if(language.containsKey(key)){
+      x = g.getFontMetrics().stringWidth(key);
+      g.setColor((Color)language.get(key));
+      g.drawString(key,(p.x-x), p.y);
+      g.setColor(txColor);}
+    }*/
+}
 /***************************************************************/
 public void DrawLineIndex(Graphics g){ //Draws line index numbers 
     int h = g.getFontMetrics().getHeight();
