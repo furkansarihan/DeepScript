@@ -1,18 +1,41 @@
 package src;
 
-public class CharList{
+import java.util.Iterator;
+import java.util.Optional;
+
+public class CharList implements Iterable<Char> {
 
     public Char root = null; // First character of line
-    public int size = null;
+    public int size;
     public CharList(){
         size = 0;
+        root = new Char("EMPTY");
     }
+    public Iterator<Char> iterator() {
+        return new CharIterator();
+    }
+    class CharIterator implements Iterator<Char> {
+        private Char current = root;
 
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Char next(){
+            current = current.nextChar;
+            return current;
+        }
+
+        public void remove(){
+
+        }
+    }
     public void addFirst(char c){
         Char temp = root.nextChar;
         root = new Char(c);
         root.nextChar = temp;
         size ++;
+        System.out.print(c);
     }
 
     public void addLast(char c){
@@ -32,9 +55,11 @@ public class CharList{
         }
         Char added = new Char(c);
         iterator.prevChar.nextChar = added;
-        iterator.nextChar = added.prev;
+        added.prevChar = iterator.prevChar;
+        added = iterator.prevChar;
         added.nextChar = iterator;
         size ++;
+        System.out.print(c);
     }
 
     public int getSize() { return size; }
