@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.CanvasController">
+   <children>
+      <Canvas fx:id="textCanvas" height="600.0" layoutX="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#mouseAction" width="701.0" />
+      <Canvas fx:id="indexCanvas" height="600.0" layoutX="46.0" width="60.0" />
+   </children>
+</AnchorPane>
