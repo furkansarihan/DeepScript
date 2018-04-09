@@ -2,14 +2,15 @@ package src;
 
 import java.util.LinkedList;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 public class Line{
 
-    /*public CharList chars = null;*/
+    /* Varibles */
     public LinkedList<Char> chars = null;
     public int cursorChar;
-
-    public Line nextLine = null; // Will be implemented with line operations 
-    public Line prevLine = null; // Will be implemented with line operations
+    /* Varibles */
 
     //Creating empty line
     public Line(){
@@ -22,9 +23,22 @@ public class Line{
     //Creating line with some String. 
     //ex: Pressing enter without being end of the line.
     public Line(LinkedList<Char> llc){
-
+        //
     }
-
+    public boolean remove(int cursorLine){
+        if (cursorChar != 0){ // Basic delete
+            chars.remove(cursorChar-1);
+            cursorChar = cursorChar - 1;
+            return false;
+        }else{
+            if(cursorLine != 0){ // Cursor going to up line and deleted current line
+                return true;
+            }else{
+                return false;
+            }
+        }
+        
+    }
     public void type(char c){
         System.out.println("Line");
         if (cursorChar == 0) {
@@ -37,5 +51,9 @@ public class Line{
             //System.out.println("middle");
             cursorChar++;
         }
+    }
+    public void moveCursor(int i){
+        if ( cursorChar != chars.size()-1 && i>0 ) cursorChar++;
+        else if (cursorChar > 0 ) cursorChar--;
     }
 }

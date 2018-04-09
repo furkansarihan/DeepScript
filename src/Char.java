@@ -3,19 +3,22 @@ package src;
 import javafx.scene.paint.Color;
 
 public class Char{
-
-    int cursorChar; // Setting upClass
-    Color color; // Drawing color of char
+    /* Varibles */
+    public char ch;
+    public int cursorChar; // Setting upClass
+    public Color color = new Color(0.811, 0.811, 0.811,1.0); // Drawing color of char
+    /* Varibles */
 
     /*
         Font information also 
         could be stored here. 
+
     */
-    Char nextChar;
-    Char prevChar;
-
-    public Char(Char prev, Char next){
-
+    
+    public Char(char c){
+        ch = c;
     }
-
+    public String toString(){
+        return Character.toString(ch);
+    }
 }
