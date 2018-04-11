@@ -13,10 +13,10 @@ public class Line{
     /* Varibles */
 
     //Creating empty line
-    public Line(){
+    public Line(int cursorLine){
         /*chars = new CharList();*/
         chars = new LinkedList<Char>();
-        chars.add(new Char((char)10)); // For always beeing element of the list
+        chars.add(new Char((char)10,cursorLine,cursorChar)); // For always beeing element of the list
         cursorChar = 0;
     }
 
@@ -28,7 +28,8 @@ public class Line{
     public boolean remove(int cursorLine){
         if (cursorChar != 0){ // Basic delete
             chars.remove(cursorChar-1);
-            cursorChar = cursorChar - 1;
+            cursorChar--;
+            shiftCursorCharsLeft();
             return false;
         }else{
             if(cursorLine != 0){ // Cursor going to up line and deleted current line
@@ -39,17 +40,20 @@ public class Line{
         }
         
     }
-    public void type(char c){
-        System.out.println("Line");
-        if (cursorChar == 0) {
-            chars.addFirst(new Char(c));
-            //System.out.println("cursor 0"); 
-            cursorChar++;
+    public void type(char c, int cursorLine){
+        chars.add(cursorChar, new Char(c, cursorLine, cursorChar));
+        cursorChar++;
+        if (cursorChar != chars.size()-1) 
+            shiftCursorCharsRigth(); // Shifting cursor char indexes when typed inside the line
+    }
+    public void shiftCursorCharsRigth(){
+        for (int i = cursorChar; i < chars.size(); i++) {
+            chars.get(i).cursorChar++;
         }
-        else {
-            chars.add(cursorChar, new Char(c));
-            //System.out.println("middle");
-            cursorChar++;
+    }
+    public void shiftCursorCharsLeft(){
+        for (int i = cursorChar; i < chars.size(); i++) {
+            chars.get(i).cursorChar--;
         }
     }
     public void moveCursor(int i){

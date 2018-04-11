@@ -7,6 +7,8 @@ import javafx.stage.Window;
 import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -35,34 +37,61 @@ public class CanvasController implements Initializable {
     
     public Font font;
     public Color backColor = new Color(0.122, 0.122, 0.122,1.0);
-    public int TAX = 800; // Text area width
-    public int TAY = 600; // Text area heigth
+    public Color indexColor = new Color(0.500, 0.500, 0.500,1.0);
+    public int TAX = 1920; // Text area width
+    public int TAY = 1080; // Text area heigth
+    
+    public int TAXI = 60; // Text area width
+    public int TAYI = 600; // Text area heigth
+    
     public int fontSize = 16;
 
      /* Objects */
     public Nizam main;
     public TextArea text; // Source text area
     private GraphicsContext gc;
+    private GraphicsContext gcIc; // IndexCanvas
      /* Objects */
 
     @FXML
+    private void onKeyTyped(KeyEvent event) {
+        char c = event.getCharacter().toCharArray()[0];
+        if(c>31&&c<126){
+            System.out.println(c);
+            System.out.println(c);
+            System.out.println("Handle icerisi "+c);
+            text.type(c);
+            text.renderCurrentLine(gc,true);// Renders the changes on current line
+        }
+    }
+    @FXML
     private void onKeyPressed(KeyEvent event) {
-        System.out.println("merhaba");
-            if(event.getCode().equals(KeyCode.ENTER)){
+            String s = event.getCharacter();
+            KeyCode ke = event.getCode();
+            System.out.println(s);
+            if(ke.equals(KeyCode.ENTER)){
                 text.clearCursor(gc);
-                text.addLine();
-            }else if(event.getCode().equals(KeyCode.BACK_SPACE)){
-                text.remove();
-            }else if(event.getCode().equals(KeyCode.LEFT)){
-                text.moveCursor(-1);
-            }else if(event.getCode().equals(KeyCode.RIGHT)){
-                text.moveCursor(1);
-            }else{
-                System.out.println(event.getText());
-                System.out.println("Handle icerisi "+event.getText());
-                text.type(event.getText().toCharArray()[0]);
+                text.addLine();text.renderCurrentLine(gc,true);drawIndex();
+            }else if(ke.equals(KeyCode.BACK_SPACE)){
+                if(text.remove()){
+                text.renderCurrentLine(gc,false);
+                text.deleteCurrentLine();
+                }
+                text.renderCurrentLine(gc,true);
+                drawIndex();
+            }else if(ke.equals(KeyCode.LEFT)){
+                text.moveCursor(-1);text.renderCurrentLine(gc,true);
+            }else if(ke.equals(KeyCode.RIGHT)){
+                text.moveCursor(1);text.renderCurrentLine(gc,true);
+            }else if(ke.equals(KeyCode.UP)){
+                text.renderCurrentLine(gc,false);
+                text.upKey();
+                text.renderCurrentLine(gc,true);
+            }else if(ke.equals(KeyCode.DOWN)){
+                text.renderCurrentLine(gc,false);
+                text.downKey();
+                text.renderCurrentLine(gc,true);
             }
-            text.renderCurrentLine(gc);// Renders the changes on current line
     }
     @FXML
     private void mouseAction(MouseEvent event) {
@@ -74,13 +103,36 @@ public class CanvasController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         text = new TextArea(backColor); // Creating empty text area
         createCanvas();
+        drawIndex();
     }
     public void createCanvas(){
         font = new Font("Courier New", fontSize);
+        /* Text Canvas */
         gc = textCanvas.getGraphicsContext2D();
         gc.setFont(font);
         gc.setFill(backColor);
         gc.fillRect(0, 0, TAX, TAY);
+        /* Text Canvas */
+        
+        /* Index Canvas */
+        gcIc = indexCanvas.getGraphicsContext2D();
+        gcIc.setFont(font);
+        gcIc.setFill(backColor);
+        gcIc.fillRect(0, 0, TAXI, TAYI);
+        /* Index Canvas */
+    }
+    public void drawIndex(){
+        gcIc.setFill(backColor);
+        gcIc.fillRect(0, 0, TAXI, TAYI);
+        int top = text.lines.size();
+        int i = 0;
+        int y = fontSize-4;
+        while(i != top){
+            gcIc.setFill(indexColor);
+            gcIc.fillText(Integer.toString(i), 20, y);
+            i++;
+            y += fontSize;
+        }
     }
     public void setObjects(Nizam n){
         main = n;
