@@ -22,16 +22,16 @@ public class TextArea{
     /* Varibles */
     
     public TextArea(Color bc){
-        lines = new LinkedList<Line>(); // Creating emty LineList
-        lines.add(new Line());
         cursorLine = 0;
+        lines = new LinkedList<Line>(); // Creating emty LineList
+        lines.add(new Line(cursorLine));
         backColor = bc;
         heigth = 16;
         y = heigth;
     }
 
     public void addLine(){
-        lines.add(cursorLine+1, new Line());
+        lines.add(cursorLine+1, new Line(cursorLine));
         cursorLine++; // new Line added
         y += heigth;
     }
@@ -41,9 +41,10 @@ public class TextArea{
     }
     public void type(char c){
         System.out.println("TextArea");    
-        lines.get(cursorLine).type(c);
+        lines.get(cursorLine).type(c, cursorLine);
     }
-    public void renderCurrentLine(GraphicsContext gc){
+    public void renderCurrentLine(GraphicsContext gc, boolean drawCursor){
+        System.out.println(cursorLine);
         Line l = lines.get(cursorLine);
         x = 0;
         y = y-4;
@@ -54,7 +55,8 @@ public class TextArea{
                 x += width;
             }
         y = y+4;
-        gc.fillRect(l.cursorChar*width, y-heigth, 1, heigth);
+        if (drawCursor) gc.fillRect(l.cursorChar*width, y-heigth, 1, heigth);
+        //if(b) renderLinesAfter();
     }
     public void clearLine(GraphicsContext gc){
         int yy = y;
@@ -62,11 +64,10 @@ public class TextArea{
             yy += 4;
         }
         gc.setFill(backColor); // Firstly clear the line with bacground color
-        gc.fillRect(0, cursorLine*heigth, 800, yy);
+        gc.fillRect(0, cursorLine*heigth, 800, heigth);
     }
-    public void remove(){
-        removeOP = lines.get(cursorLine).remove(cursorLine); // True when able to delete empty line
-        if (removeOP) deleteCurrentLine();
+    public boolean remove(){ // returns true when line is deleted
+        return lines.get(cursorLine).remove(cursorLine); // True when able to delete empty line
     }
     public void print(){
         for (Char c : lines.get(cursorLine).chars) {
@@ -81,5 +82,17 @@ public class TextArea{
         lines.remove(cursorLine); // Remove from list
         cursorLine--; // Decrease the cursorLine index
         y -= heigth; // Update drawing refference
+    }
+    public void upKey(){
+        if (cursorLine != 0) {
+            cursorLine --; 
+            y-=heigth;
+        }
+    }
+    public void downKey(){
+        if (cursorLine != lines.size()-1) {
+            cursorLine ++;
+            y+=heigth; 
+        }
     }
 }
