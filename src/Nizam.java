@@ -22,6 +22,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 
+/* 
+ *
+ * Furkan Sarihan 
+ * fusarihan@gmail.com
+ * 
+ */
+
 public class Nizam extends Application{
 
     /* Defines */
@@ -56,8 +63,8 @@ public class Nizam extends Application{
         CanvasController nc = loader.getController();
         System.out.println(nc);
         System.out.println(this);
-        nc.setObjects(this);
         scene = new Scene(root);
+        nc.setObjects(scene);
         stage.setScene(scene);
         stage.show();
         nc.focus();

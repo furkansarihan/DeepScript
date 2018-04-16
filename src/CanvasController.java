@@ -14,6 +14,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -47,7 +48,8 @@ public class CanvasController implements Initializable {
     public int fontSize = 16;
 
      /* Objects */
-    public Nizam main;
+    public Nizam main; // ?
+    public Scene scene;
     public TextArea text; // Source text area
     private GraphicsContext gc;
     private GraphicsContext gcIc; // IndexCanvas
@@ -70,12 +72,13 @@ public class CanvasController implements Initializable {
             KeyCode ke = event.getCode();
             System.out.println(s);
             if(ke.equals(KeyCode.ENTER)){
-                text.clearCursor(gc);
-                text.addLine();text.renderCurrentLine(gc,true);drawIndex();
+                text.addLine(gc);
+                drawIndex();
             }else if(ke.equals(KeyCode.BACK_SPACE)){
                 if(text.remove()){
                 text.renderCurrentLine(gc,false);
                 text.deleteCurrentLine();
+                text.renderToEnd(gc);
                 }
                 text.renderCurrentLine(gc,true);
                 drawIndex();
@@ -92,6 +95,14 @@ public class CanvasController implements Initializable {
                 text.downKey();
                 text.renderCurrentLine(gc,true);
             }
+    }
+    @FXML
+    private void onMouseEntered(MouseEvent event) {
+        scene.setCursor(Cursor.TEXT);
+    }
+    @FXML
+    private void onMouseExited(MouseEvent event) {
+        scene.setCursor(Cursor.DEFAULT);
     }
     @FXML
     private void mouseAction(MouseEvent event) {
@@ -127,15 +138,15 @@ public class CanvasController implements Initializable {
         int top = text.lines.size();
         int i = 0;
         int y = fontSize-4;
+        gcIc.setFill(indexColor);
         while(i != top){
-            gcIc.setFill(indexColor);
             gcIc.fillText(Integer.toString(i), 20, y);
             i++;
             y += fontSize;
         }
     }
-    public void setObjects(Nizam n){
-        main = n;
+    public void setObjects(Scene s){
+        scene = s;
     }
     public void focus(){
         textCanvas.requestFocus();

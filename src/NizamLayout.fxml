@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.CanvasController">
+<AnchorPane id="AnchorPane" prefHeight="404.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.CanvasController">
    <children>
-      <Canvas fx:id="textCanvas" height="600.0" layoutX="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#mouseAction" width="701.0" />
-      <Canvas fx:id="indexCanvas" height="600.0" layoutX="46.0" width="60.0" />
+      <Canvas fx:id="textCanvas" height="600.0" layoutX="106.0" onKeyPressed="#onKeyPressed" onKeyTyped="#onKeyTyped" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" width="800.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+      <Canvas fx:id="indexCanvas" height="600.0" layoutX="53.0" width="60.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="25.0" />
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="900.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="New" />
+                  <MenuItem mnemonicParsing="false" text="Open" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Save" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ScrollBar layoutX="879.0" layoutY="25.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="14.0" />
    </children>
 </AnchorPane>
