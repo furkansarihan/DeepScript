@@ -3,8 +3,6 @@ package src;
 import java.util.LinkedList;
 
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -14,16 +12,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.*;
 
 /* 
- *
  * Furkan Sarihan 
  * fusarihan@gmail.com
  * 
@@ -33,7 +24,7 @@ public class Nizam extends Application{
 
     /* Defines */
     public int TAX = 800; // Text area width
-    public int TAY = 600; // Text area heigth
+    public int TAY = 680; // Text area heigth
     /* Defines */
 
     /* Varibles */

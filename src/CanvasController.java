@@ -4,11 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Window;
 
+import java.awt.Point;
 import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -35,9 +37,13 @@ public class CanvasController implements Initializable {
     private Canvas textCanvas;
     @FXML
     private Canvas indexCanvas;
+    @FXML
+    private Canvas bottomCanvas;
     
     public Font font;
     public Color backColor = new Color(0.122, 0.122, 0.122,1.0);
+    public Color selectColor = new Color(0.101, 0.603, 0.976,1.0);
+    public Color bottomColor = new Color(0.101, 0.603, 0.976,1.0);
     public Color indexColor = new Color(0.500, 0.500, 0.500,1.0);
     public int TAX = 1920; // Text area width
     public int TAY = 1080; // Text area heigth
@@ -46,6 +52,8 @@ public class CanvasController implements Initializable {
     public int TAYI = 600; // Text area heigth
     
     public int fontSize = 16;
+    public boolean select = false;
+    public ArrayList<Point> points = new ArrayList<>();
 
      /* Objects */
     public Nizam main; // ?
@@ -53,6 +61,7 @@ public class CanvasController implements Initializable {
     public TextArea text; // Source text area
     private GraphicsContext gc;
     private GraphicsContext gcIc; // IndexCanvas
+    private GraphicsContext gcBc; // IndexCanvas
      /* Objects */
 
     @FXML
@@ -63,7 +72,7 @@ public class CanvasController implements Initializable {
             System.out.println(c);
             System.out.println("Handle icerisi "+c);
             text.type(c);
-            text.renderCurrentLine(gc,true);// Renders the changes on current line
+            text.renderCurrentLine();// Renders the changes on current line
         }
     }
     @FXML
@@ -72,28 +81,29 @@ public class CanvasController implements Initializable {
             KeyCode ke = event.getCode();
             System.out.println(s);
             if(ke.equals(KeyCode.ENTER)){
-                text.addLine(gc);
+                text.addLine();
                 drawIndex();
             }else if(ke.equals(KeyCode.BACK_SPACE)){
                 if(text.remove()){
-                text.renderCurrentLine(gc,false);
+                text.renderCurrentLine();
                 text.deleteCurrentLine();
-                text.renderToEnd(gc);
+                text.renderToEnd();
                 }
-                text.renderCurrentLine(gc,true);
+                text.renderCurrentLine();
                 drawIndex();
             }else if(ke.equals(KeyCode.LEFT)){
-                text.moveCursor(-1);text.renderCurrentLine(gc,true);
+                text.moveCursor(-1);text.renderCurrentLine();
             }else if(ke.equals(KeyCode.RIGHT)){
-                text.moveCursor(1);text.renderCurrentLine(gc,true);
+                text.moveCursor(1);text.renderCurrentLine();
             }else if(ke.equals(KeyCode.UP)){
-                text.renderCurrentLine(gc,false);
+                text.renderCurrentLine();
                 text.upKey();
-                text.renderCurrentLine(gc,true);
+                text.renderCurrentLine();
             }else if(ke.equals(KeyCode.DOWN)){
-                text.renderCurrentLine(gc,false);
+                text.renderCurrentLine();
                 text.downKey();
-                text.renderCurrentLine(gc,true);
+                text.renderCurrentLine();
+                text.resetSelect();
             }
     }
     @FXML
@@ -105,15 +115,24 @@ public class CanvasController implements Initializable {
         scene.setCursor(Cursor.DEFAULT);
     }
     @FXML
-    private void mouseAction(MouseEvent event) {
-        System.out.println("MOUSE");
-        System.out.println(text.lines.getFirst().cursorChar);
-        System.out.println("MOUSE");
+    private void mousePressed(MouseEvent event) {
+        if (select) { text.resetSelect(); select = false; }
+        points.add(0, new Point((int)event.getX(),(int)event.getY()));
+    }
+    @FXML
+    private void mouseReleased(MouseEvent event) {
+        points.add(1, new Point((int)event.getX(),(int)event.getY()));
+        text.selectText(points);
+        select = true;
+    }
+    @FXML
+    private void clickPane(MouseEvent event) {
+        
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        text = new TextArea(backColor); // Creating empty text area
         createCanvas();
+        text = new TextArea(backColor, selectColor, gc); // Creating empty text area
         drawIndex();
     }
     public void createCanvas(){
@@ -131,6 +150,13 @@ public class CanvasController implements Initializable {
         gcIc.setFill(backColor);
         gcIc.fillRect(0, 0, TAXI, TAYI);
         /* Index Canvas */
+
+        /* Bottom Canvas */
+        gcBc = bottomCanvas.getGraphicsContext2D();
+        gcBc.setFont(font);
+        gcBc.setFill(bottomColor);
+        gcBc.fillRect(0, 0, 900, 25);
+        /* Bottom Canvas */
     }
     public void drawIndex(){
         gcIc.setFill(backColor);

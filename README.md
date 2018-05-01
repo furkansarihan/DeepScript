@@ -1,7 +1,7 @@
-# FScript
+# DeepScript
 #### "TEST PROJECT"
 
-FScript is a scripting language which running on java.
+DeepScript is an AI that can write code.
 
 ## Modules
 
@@ -14,7 +14,7 @@ Edittor is a text editor with Syntax highlighting.
 ## Installing
 
 ```
-Hello there ! We don't have a installation yet and don't need.
+Hello there ! We don't have an installation process yet and don't need.
 ```
 
 ## Authors
