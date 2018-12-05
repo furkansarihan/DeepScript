@@ -3,20 +3,31 @@
 
 DeepScript is an AI that can write code.
 
-## Modules
+# Modules
 
-* ### Edittor
+## *Edittor*
 
 Edittor is a text editor with Syntax highlighting.
 -Still not usable :)-
-![ScreenShot](https://github.com/furkansarihan/FScript/blob/master/images/ss.png?raw=true)
+![ScreenShot](https://github.com/furkansarihan/DeepScript/blob/master/images/ss.png?raw=true)
 
-## Installing
+### Installing
+
+Just run the  bat file on **Windows**
+
+*or*
+
+- open cmd.exe and
+
+- locate to project directory
+
+and run
 
 ```
-Hello there ! We don't have an installation process yet and don't need.
+compilerun.bat
 ```
 
+There shuld be a ``compilerun.sh``, I know...
 ## Authors
 
 * **Furkan Sarihan** - [You're almost here](https://github.com/furkansarihan)
