@@ -48,7 +48,7 @@ public class TextArea{
         lines.add(cursorLine+1, new Line(lines.get(cursorLine).getCharListFromCursor(),cursorLine));
         cursorLine++; // new Line added
         if (cursorLine < lines.size()-1) renderToEnd();
-        renderCurrentLine();
+        renderCurrentLine(true);
     }
     public void clearCursor(){ // Not used now
         gc.setFill(backColor);
@@ -58,7 +58,7 @@ public class TextArea{
         System.out.println("TextArea");
         lines.get(cursorLine).type(c, cursorLine);
     }
-    public void renderCurrentLine(){
+    public void renderCurrentLine(boolean renderCursor){
         System.out.println("Rendered line is : "+cursorLine);
         Line l = lines.get(cursorLine);
         x = 0;
@@ -68,7 +68,11 @@ public class TextArea{
                 gc.fillText(c.toString(), x, cursorLine*heigth+heigth-3);
                 x += width;
             }
-        if (false) gc.fillRect(l.cursorChar*width, cursorLine*heigth, 4, heigth);
+        if (renderCursor) renderCursor();
+    }
+    public void renderCursor(){
+        System.out.println("Cursor render to line number is: " + cursorLine);
+        gc.fillRect(lines.get(cursorLine).cursorChar*width, cursorLine*heigth, 4, heigth);
     }
     public void renderToEnd(){
         gc.setFill(backColor);
@@ -100,7 +104,7 @@ public class TextArea{
                 gc.fillText(c.toString(), x, index*heigth+heigth-3);
                 x += width;
             }
-        if (false) gc.fillRect(l.cursorChar*width, cursorLine*heigth, 4, heigth);
+        if (true) gc.fillRect(l.cursorChar*width, cursorLine*heigth, 4, heigth);
     }
     public void clearLine(){
         gc.setFill(backColor); // Firstly clear the line with bacground color
@@ -173,6 +177,9 @@ public class TextArea{
             System.out.print(c);
         }
         lines.remove(cursorLine); // Remove from list
+        if (cursorLine == lines.size()){ // Clean the empty line
+            clearLine();
+        }
         cursorLine--; // Decrease the cursorLine index
     }
     public void upKey(){

@@ -72,7 +72,7 @@ public class CanvasController implements Initializable {
             System.out.println(c);
             System.out.println("Handle icerisi "+c);
             text.type(c);
-            text.renderCurrentLine();// Renders the changes on current line
+            text.renderCurrentLine(true);// Renders the changes on current line
         }
     }
     @FXML
@@ -85,24 +85,25 @@ public class CanvasController implements Initializable {
                 drawIndex();
             }else if(ke.equals(KeyCode.BACK_SPACE)){
                 if(text.remove()){
-                text.renderCurrentLine();
-                text.deleteCurrentLine();
-                text.renderToEnd();
+                    text.renderCurrentLine(true);
+                    text.deleteCurrentLine();
+                    text.renderToEnd();
                 }
-                text.renderCurrentLine();
+                text.renderCurrentLine(true);
                 drawIndex();
             }else if(ke.equals(KeyCode.LEFT)){
-                text.moveCursor(-1);text.renderCurrentLine();
+                text.moveCursor(-1);text.renderCurrentLine(true);
             }else if(ke.equals(KeyCode.RIGHT)){
-                text.moveCursor(1);text.renderCurrentLine();
+                text.moveCursor(1);text.renderCurrentLine(true);
             }else if(ke.equals(KeyCode.UP)){
-                text.renderCurrentLine();
+                text.renderCurrentLine(false);
                 text.upKey();
-                text.renderCurrentLine();
+                text.renderCurrentLine(true);
+                text.resetSelect();
             }else if(ke.equals(KeyCode.DOWN)){
-                text.renderCurrentLine();
+                text.renderCurrentLine(false);
                 text.downKey();
-                text.renderCurrentLine();
+                text.renderCurrentLine(true);
                 text.resetSelect();
             }
     }
@@ -133,6 +134,7 @@ public class CanvasController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         createCanvas();
         text = new TextArea(backColor, selectColor, gc); // Creating empty text area
+        text.renderCursor();
         drawIndex();
     }
     public void createCanvas(){
